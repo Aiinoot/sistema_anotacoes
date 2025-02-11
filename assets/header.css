@@ -1,0 +1,67 @@
+body {
+    padding-top: 80px;
+}
+
+
+.card-note {
+    transition: transform 0.2s ease-in-out;
+}
+.card-note:hover {
+    transform: scale(1.02);
+}
+.text-truncate {
+    max-width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.img-preview {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.glass-navbar {
+    background: rgba(25, 25, 25, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 0;
+}
+
+.custom-toggler {
+    border: none;
+}
+
+.custom-toggler:focus {
+    box-shadow: none;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.logout-btn {
+    border-radius: 20px;
+    padding: 8px 16px;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: rgb(255, 100, 100);
+    border-color: transparent;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    color: #fff !important;
+}
+
+.navbar-brand i {
+    font-size: 1.7rem;
+    color: #f8f9fa;
+}

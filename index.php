@@ -86,27 +86,7 @@ $result = $stmt->get_result();
     <title>Sistema de Anotações</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <style>
-        .card-note {
-            transition: transform 0.2s ease-in-out;
-        }
-        .card-note:hover {
-            transform: scale(1.02);
-        }
-        .text-truncate {
-            max-width: 100%;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .img-preview {
-            max-width: 100px;
-            max-height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/header.css">
 </head>
 <body class="bg-light">
     <?php include 'header.php'; ?>
