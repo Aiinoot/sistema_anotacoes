@@ -25,6 +25,8 @@ $sqlAnotacoes = "CREATE TABLE IF NOT EXISTS anotacoes (
     usuario_id INT NOT NULL,
     titulo VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
+    favoritos BOOLEAN DEFAULT FALSE;
+    imagem VARCHAR(255) NULL;
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 )";

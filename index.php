@@ -18,14 +18,49 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 
-// Criar anotação
-if (isset($_POST['criar'])) {
+// Criar diretório de uploads se não existir
+if (!file_exists('uploads')) {
+    mkdir('uploads', 0777, true);
+}
+
+// Editar anotação
+$editando = false;
+$titulo = "";
+$descricao = "";
+$id_editar = null;
+$imagem_nome = null;
+if (isset($_GET['editar'])) {
+    $id_editar = $_GET['editar'];
+    $stmt = $conn->prepare("SELECT titulo, descricao, imagem FROM anotacoes WHERE id = ? AND usuario_id = ?");
+    $stmt->bind_param("ii", $id_editar, $_SESSION['usuario_id']);
+    $stmt->execute();
+    $stmt->bind_result($titulo, $descricao, $imagem_nome);
+    if ($stmt->fetch()) {
+        $editando = true;
+    }
+    $stmt->close();
+}
+
+// Criar ou atualizar anotação
+if (isset($_POST['salvar'])) {
     $titulo = $_POST['titulo'];
     $descricao = $_POST['descricao'];
-    $usuario_id = $_SESSION['usuario_id']; // Pega o usuário logado
-
-    $stmt = $conn->prepare("INSERT INTO anotacoes (usuario_id, titulo, descricao) VALUES (?, ?, ?)");
-    $stmt->bind_param("iss", $usuario_id, $titulo, $descricao);
+    $usuario_id = $_SESSION['usuario_id'];
+    
+    if (!empty($_FILES['imagem']['name'])) {
+        $imagem_extensao = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
+        $imagem_nome = time() . '.' . $imagem_extensao;
+        $caminho_imagem = "uploads/" . $imagem_nome;
+        move_uploaded_file($_FILES['imagem']['tmp_name'], $caminho_imagem);
+    }
+    
+    if ($editando) {
+        $stmt = $conn->prepare("UPDATE anotacoes SET titulo = ?, descricao = ?, imagem = ? WHERE id = ? AND usuario_id = ?");
+        $stmt->bind_param("sssii", $titulo, $descricao, $imagem_nome, $id_editar, $usuario_id);
+    } else {
+        $stmt = $conn->prepare("INSERT INTO anotacoes (usuario_id, titulo, descricao, imagem) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("isss", $usuario_id, $titulo, $descricao, $imagem_nome);
+    }
     $stmt->execute();
     header("Location: index.php");
     exit();
@@ -35,8 +70,6 @@ if (isset($_POST['criar'])) {
 if (isset($_GET['excluir'])) {
     $id = $_GET['excluir'];
     $usuario_id = $_SESSION['usuario_id'];
-
-    // Certifique-se de que o usuário só pode excluir suas próprias anotações
     $stmt = $conn->prepare("DELETE FROM anotacoes WHERE id = ? AND usuario_id = ?");
     $stmt->bind_param("ii", $id, $usuario_id);
     $stmt->execute();
@@ -63,16 +96,25 @@ $result = $stmt->get_result();
     <?php include 'header.php'; ?>
     <h2 class="text-center mb-4">Sistema de Anotações</h2>
 
-    <form method="POST" class="mb-4">
+    <form method="POST" enctype="multipart/form-data" class="mb-4">
+        <input type="hidden" name="id" value="<?= $id_editar ?>">
         <div class="mb-3">
             <label class="form-label">Título</label>
-            <input type="text" name="titulo" class="form-control" required>
+            <input type="text" name="titulo" class="form-control" value="<?= htmlspecialchars($titulo) ?>" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Descrição</label>
-            <textarea name="descricao" class="form-control" rows="3" required></textarea>
+            <textarea name="descricao" class="form-control" rows="3" required><?= htmlspecialchars($descricao) ?></textarea>
         </div>
-        <button type="submit" name="criar" class="btn btn-primary">Criar Anotação</button>
+        <div class="mb-3">
+            <label class="form-label">Imagem (opcional)</label>
+            <input type="file" name="imagem" class="form-control">
+            <?php if ($imagem_nome): ?>
+                <img src="uploads/<?= htmlspecialchars($imagem_nome) ?>" width="100" class="img-thumbnail mt-2">
+            <?php endif; ?>
+        </div>
+        <button type="submit" name="salvar" class="btn btn-primary">Salvar Anotação</button>
+        <a href="index.php" class="btn btn-secondary">Cancelar</a>
         <a href="logout.php" class="btn btn-danger">Sair</a>
     </form>
 
@@ -82,6 +124,7 @@ $result = $stmt->get_result();
                 <th>Título</th>
                 <th>Descrição</th>
                 <th>Data</th>
+                <th>Imagem</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -92,7 +135,14 @@ $result = $stmt->get_result();
                 <td><?= htmlspecialchars($row['descricao']) ?></td>
                 <td><?= $row['criado_em'] ?></td>
                 <td>
-                    <a href="editar.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
+                    <?php if (!empty($row['imagem']) && file_exists("uploads/" . $row['imagem'])): ?>
+                        <img src="uploads/<?= htmlspecialchars($row['imagem']) ?>" width="100" class="img-thumbnail">
+                    <?php else: ?>
+                        <span>Sem imagem</span>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <a href="index.php?editar=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
                     <a href="?excluir=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza?')">Excluir</a>
                 </td>
             </tr>
