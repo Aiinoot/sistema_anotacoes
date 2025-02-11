@@ -5,8 +5,11 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <?php if (isset($_SESSION['usuario_id'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link disabled text-white">Olá, <strong><?= htmlspecialchars($_SESSION['nome']); ?></strong></a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="logout.php">Sair</a></li>
                 <?php else: ?>
                     <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>

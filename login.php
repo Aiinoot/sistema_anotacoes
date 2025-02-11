@@ -9,7 +9,7 @@ if (isset($_POST['login'])) {
     $senha = $_POST['senha'];
 
     if (!empty($usuario) && !empty($senha)) {
-        $stmt = $conn->prepare("SELECT id, senha FROM usuarios WHERE usuario = ?");
+        $stmt = $conn->prepare("SELECT id, senha, usuario FROM usuarios WHERE usuario = ?");
         $stmt->bind_param("s", $usuario);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -18,6 +18,7 @@ if (isset($_POST['login'])) {
             $row = $result->fetch_assoc();
             if (password_verify($senha, $row['senha'])) {
                 $_SESSION['usuario_id'] = $row['id'];
+                $_SESSION['nome'] = $row['usuario'];
                 header("Location: index.php");
                 exit();
             } else {
