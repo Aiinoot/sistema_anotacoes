@@ -1,8 +1,9 @@
+
 <?php
-// Conexão com o banco de dados (MySQL)
+
 $host = 'localhost';
-$user = 'root'; // Altere conforme seu ambiente
-$password = ''; // Altere conforme seu ambiente
+$user = 'root'; 
+$password = ''; 
 $database = 'sistema_anotacoes';
 
 $conn = new mysqli($host, $user, $password, $database);
@@ -25,7 +26,7 @@ $sqlAnotacoes = "CREATE TABLE IF NOT EXISTS anotacoes (
     titulo VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 )";
 $conn->query($sqlAnotacoes);
 ?>
