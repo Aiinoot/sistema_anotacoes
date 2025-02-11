@@ -2,6 +2,8 @@
 session_start();
 include 'db.php';
 
+$erro = ""; // Inicializa a variável de erro para evitar problemas
+
 if (isset($_POST['login'])) {
     $usuario = trim($_POST['usuario']);
     $senha = $_POST['senha'];
@@ -40,6 +42,7 @@ if (isset($_POST['login'])) {
 <body class="container mt-5">
     <?php include 'header.php'; ?>
     <h2 class="text-center">Login</h2>
+    <?php if (!empty($erro)) echo "<div class='alert alert-danger'>$erro</div>"; ?>
     <form method="POST">
         <div class="mb-3">
             <label class="form-label">Usuário</label>
@@ -50,6 +53,7 @@ if (isset($_POST['login'])) {
             <input type="password" name="senha" class="form-control" required>
         </div>
         <button type="submit" name="login" class="btn btn-primary">Entrar</button>
+        <a href="register.php" class="btn btn-secondary">Registrar-se</a>
     </form>
 </body>
 </html>

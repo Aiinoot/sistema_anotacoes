@@ -1,6 +1,8 @@
 <?php
 include 'db.php';
 
+$erro = "";
+
 if (isset($_POST['registrar'])) {
     $usuario = trim($_POST['usuario']);
     $senha = $_POST['senha'];
@@ -19,7 +21,7 @@ if (isset($_POST['registrar'])) {
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $erro = "Usuário já existe!";
+            $erro = "Usuário já existe! Escolha outro nome.";
         } else {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             $stmt = $conn->prepare("INSERT INTO usuarios (usuario, senha) VALUES (?, ?)");
@@ -42,7 +44,7 @@ if (isset($_POST['registrar'])) {
 <body class="container mt-5">
     <?php include 'header.php'; ?>
     <h2 class="text-center">Registrar</h2>
-    <?php if (isset($erro)) echo "<div class='alert alert-danger'>$erro</div>"; ?>
+    <?php if (!empty($erro)) echo "<div class='alert alert-danger'>$erro</div>"; ?>
     <form method="POST">
         <div class="mb-3">
             <label class="form-label">Usuário</label>
@@ -57,7 +59,7 @@ if (isset($_POST['registrar'])) {
             <input type="password" name="confirmar_senha" class="form-control" required>
         </div>
         <button type="submit" name="registrar" class="btn btn-success">Registrar</button>
-        <a href="index.php" class="btn btn-secondary">Voltar</a>
+        <a href="login.php" class="btn btn-secondary">Voltar ao Login</a>
     </form>
 </body>
 </html>
