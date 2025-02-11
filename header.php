@@ -1,16 +1,16 @@
 <nav class="navbar navbar-expand-lg fixed-top glass-navbar">
     <div class="container">
-        <!-- Logo -->
+
         <a class="navbar-brand fw-bold d-flex align-items-center" href="index.php">
             <i class="bi bi-pencil-square me-2"></i> Anotações+
         </a>
 
-        <!-- Botão Responsivo -->
+
         <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Itens do Menu -->
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
                 <?php if (isset($_SESSION['usuario_id'])): ?>
@@ -33,5 +33,4 @@
     </div>
 </nav>
 
-<!-- Estilos personalizados -->
 
