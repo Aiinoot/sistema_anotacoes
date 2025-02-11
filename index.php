@@ -131,9 +131,13 @@ $result = $stmt->get_result();
         <tbody>
             <?php while ($row = $result->fetch_assoc()): ?>
             <tr>
-                <td><?= htmlspecialchars($row['titulo']) ?></td>
-                <td><?= htmlspecialchars($row['descricao']) ?></td>
-                <td><?= $row['criado_em'] ?></td>
+                <td class="fw-bold"><?= htmlspecialchars($row['titulo']) ?></td>
+                <td>
+                    <div class="text-truncate" style="max-width: 100px;">
+                        <?= htmlspecialchars($row['descricao']) ?>
+                    </div>
+                </td>
+                <td><?= date("d/m/Y H:i:s", strtotime($row['criado_em'])) ?></td>
                 <td>
                     <?php if (!empty($row['imagem']) && file_exists("uploads/" . $row['imagem'])): ?>
                         <img src="uploads/<?= htmlspecialchars($row['imagem']) ?>" width="100" class="img-thumbnail">
@@ -142,6 +146,7 @@ $result = $stmt->get_result();
                     <?php endif; ?>
                 </td>
                 <td>
+                    <a href="visualizar.php?id=<?= $row['id'] ?>" class="btn btn-info btn-sm">Visualizar</a>
                     <a href="index.php?editar=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
                     <a href="?excluir=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza?')">Excluir</a>
                 </td>
