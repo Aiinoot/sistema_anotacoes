@@ -2,7 +2,7 @@
 session_start();
 include 'db.php';
 
-$erro = ""; // Inicializa a variável de erro para evitar problemas
+$erro = "";
 
 if (isset($_POST['login'])) {
     $usuario = trim($_POST['usuario']);

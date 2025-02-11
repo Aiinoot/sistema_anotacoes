@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Conexão com o banco
 $host = 'localhost';
 $user = 'root';
 $password = '';
@@ -12,13 +11,11 @@ if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
-// Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// Verifica se foi passado um ID válido
 if (!isset($_GET['id'])) {
     header("Location: index.php");
     exit();
@@ -27,7 +24,6 @@ if (!isset($_GET['id'])) {
 $id = $_GET['id'];
 $usuario_id = $_SESSION['usuario_id'];
 
-// Busca a anotação no banco de dados
 $stmt = $conn->prepare("SELECT titulo, descricao, imagem, criado_em FROM anotacoes WHERE id = ? AND usuario_id = ?");
 $stmt->bind_param("ii", $id, $usuario_id);
 $stmt->execute();

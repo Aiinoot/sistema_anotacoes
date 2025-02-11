@@ -11,7 +11,6 @@ if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
-// Criar tabela de usuários se não existir
 $sqlUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario VARCHAR(255) NOT NULL UNIQUE,
@@ -19,7 +18,6 @@ $sqlUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (
 )";
 $conn->query($sqlUsuarios);
 
-// Criar tabela de anotações se não existir
 $sqlAnotacoes = "CREATE TABLE IF NOT EXISTS anotacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
